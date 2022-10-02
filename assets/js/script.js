@@ -16,3 +16,19 @@ $(".row").each(function(){
         $(this).find("#block").addClass("gray");
     };
 });
+
+// Add edit ability for event block
+$(".row").one("click", "#block", function () {
+    var text = $(this)
+        .text()
+        .trim();
+    console.log(text);
+
+    var textInput = $("<textarea>")
+        .addClass("form-control col-6 px-0 border text-left py-2 px-4")
+        .val(text);
+    
+    $(this).replaceWith(textInput);
+    
+    textInput.trigger("focus");
+});
