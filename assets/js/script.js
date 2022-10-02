@@ -2,22 +2,23 @@
 $("#currentDay").text(moment().format('dddd, MMMM Do YYYY'));
 
 // Add color to indicate if time block is in the past, present, or future
-
 const time = $("#time-9").text(); 
 
 var colorCode = function () {
+    // var format = 'hh:mm:ss'; 
+    // var checkTime = moment('11:00:00', format);
     var currentTime = moment();
-    // var testTime = '10 PM';
-    // console.log("Time block: " + timeMoment);
-    // console.log(testTime);
-    console.log("current Time: " + currentTime);
-    
-    // if (moment(time, 'h A').isBefore(currentTime)) {
-    //     $("")
-    // };
+    var testTime = moment(time, 'h A');
+    var afterTime = moment(testTime).add(1, 'h');
 
-    // console.log(moment(time, 'h A').isBefore(moment('17 PM', 'hh A')));
-    // console.log(moment(testTime, 'h A').isBefore(moment('17:00 PM', 'hh:mm A')));
+    // console.log("current Time: " + currentTime);
+    if (moment(currentTime).isSameOrAfter(testTime) && moment(currentTime).isSameOrBefore(afterTime)) {
+        $("#div-9").addClass("red");
+    } else if (moment(currentTime).isBefore(testTime)) {
+        $("#div-9").addClass("green");
+    } else if (moment(currentTime).isAfter(afterTime)) {
+        $("#div-9").addClass("gray");
+    };
 };
 
 colorCode();
