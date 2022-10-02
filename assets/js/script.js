@@ -18,10 +18,11 @@ $(".row").each(function(){
 });
 
 // Add edit ability for event block
-$(".row").one("click", "#block", function () {
+$(".row").on("click", "#block", function () {
     var text = $(this)
         .text()
         .trim();
+    
     console.log(text);
 
     var textInput = $("<textarea>")
@@ -31,4 +32,19 @@ $(".row").one("click", "#block", function () {
     $(this).replaceWith(textInput);
     
     textInput.trigger("focus");
+});
+
+// Add save ability for new input
+$(".row").on("click", "span", function () {
+    // get the textarea's current value
+    var text = $(".row").find("textarea")
+        .val()
+        .trim();
+    console.log(text);
+
+    var block = $(this)
+        .closest(".row")
+        .find("#block")
+        .addClass("red");
+    console.log(block);
 });

@@ -82,3 +82,12 @@ textarea{
   background-color: rgb(116, 233, 110);
 }
 
+span:hover {
+  cursor: pointer;
+  color: #77dd77;
+  transition: all .3s ease-in-out;
+}
+
+span:active {
+  color: yellow;
+}
