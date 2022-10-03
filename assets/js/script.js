@@ -22,8 +22,6 @@ $(".row").on("click", "#block", function () {
     var text = $(this)
         .text()
         .trim();
-    
-    console.log(text);
 
     var textInput = $("<textarea>")
         .addClass("form-control col-6 px-0 border text-left py-2 px-4")
@@ -34,17 +32,55 @@ $(".row").on("click", "#block", function () {
     textInput.trigger("focus");
 });
 
+// Store current events in localStorage and run initial load
+events = JSON.parse(localStorage.getItem("events"));
+// if nothing in localStorage, create a new object 
+// to track all events status arrays
+if (!events) {
+    events = [];
+}
+
+// Initially load
+$(".row").each(function () {
+    var eachTime = $(this).find("#time").text().trim();
+    var eachText = $(this).find("#block").text().trim();
+    events.push({
+        time: eachTime,
+        text: eachText
+    });
+});
+
+console.log(events);
+
+// Update events in localStorage
+var updateEvents = function (eventTime, eventText) {
+
+    events.forEach(function (event) {
+        if (event["time"] == eventTime) {
+            event["text"] = eventText;
+        };
+    });
+
+    console.log(events);
+};
+
+// loadEvents();
+
 // Add save ability for new input
 $(".row").on("click", "span", function () {
+    // get the textarea's current time
+    var inputTime = $(this)
+        .closest(".row")
+        .find("#time")
+        .text()
+        .trim();
+    console.log(inputTime);
     // get the textarea's current value
-    var text = $(".row").find("textarea")
+    var inputText = $(".row").find("textarea")
         .val()
         .trim();
-    console.log(text);
-
-    var block = $(this)
-        .closest(".row")
-        .find("#block")
-        .addClass("red");
-    console.log(block);
+    console.log(inputText);
+    
+    updateEvents(inputTime, inputText);
+    // console.log(events);
 });
