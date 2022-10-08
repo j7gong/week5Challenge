@@ -36,26 +36,42 @@ $(".row").on("click", "#block", function () {
     textInput.trigger("focus");
 });
 
-// Store current events in localStorage and run initial load
-events = JSON.parse(localStorage.getItem("events"));
-// if nothing in localStorage, create a new object 
-// to track all events status arrays
-if (!events) {
-    events = [];
-}
-
 // Initially load
-$(".row").each(function () {
-    var eachTime = $(this).find("#time").text().trim();
-    // var eachText = null;
-    var eachText = $(this).find("#block").text().trim();
-    events.push({
-        time: eachTime,
-        text: eachText
-    });
-});
+var loadEvents = function () {
+    // Store current events in localStorage and run initial load
+    events = JSON.parse(localStorage.getItem("events"));
+    // if nothing in localStorage, create a new object 
+    // to track all events status arrays
+    if (!events) {
+        events = [];
 
-console.log(events);
+        $(".row").each(function () {
+            var eachTime = $(this).find("#time").text().trim();
+            // var eachText = null;
+            var eachText = $(this).find("#block").text().trim();
+            events.push({
+                time: eachTime,
+                text: eachText
+            });
+        });
+    }
+    
+    // load events from localStorage and reflect on the page when refresh
+    events.forEach(function (event) {
+        
+        $(".row").each(function () {
+            var eachTime = $(this).find("#time").text(); 
+            if (event["time"] == eachTime ) {
+                $(this).find("#block").text(event["text"]);
+            };
+        });
+    });
+
+};
+
+var saveEvents = function() {
+    localStorage.setItem("events", JSON.stringify(events));
+};
 
 // Update events in localStorage
 var updateEvents = function (eventTime, eventText) {
@@ -66,7 +82,7 @@ var updateEvents = function (eventTime, eventText) {
         };
     });
 
-    console.log(events);
+    saveEvents();
 };
 
 // Add save ability for new input
@@ -77,12 +93,11 @@ $(".row").on("click", "span", function () {
         .find("#time")
         .text()
         .trim();
-    console.log(inputTime);
+    
     // get the textarea's current value
     var inputText = $(".row").find("textarea")
         .val()
         .trim();
-    console.log(inputText);
     
     // save new input event in localStorage
     updateEvents(inputTime, inputText);
@@ -107,3 +122,6 @@ $(".row").on("click", "span", function () {
     // Rerun the color code function to ensure the replaced event block is colored correctly
     colorCode();
 });
+
+// Load events for the first time
+loadEvents();
