@@ -17,8 +17,6 @@ var colorCode = function () {
             $(this).find("#block").addClass("gray");
         };
     });
-
-    console.log("Run ColorCode!");
 };
 
 colorCode();
@@ -71,8 +69,6 @@ var updateEvents = function (eventTime, eventText) {
     console.log(events);
 };
 
-// loadEvents();
-
 // Add save ability for new input
 $(".row").on("click", "span", function () {
     // get the textarea's current time
@@ -92,23 +88,22 @@ $(".row").on("click", "span", function () {
     updateEvents(inputTime, inputText);
     
     // get new input from localStorage
-    var newInput = null;
-
+    var storedInput = null;
     events.forEach(function (event) {
         if (event["time"] == inputTime) {
-            newInput = event["text"]
+            storedInput = event["text"]
         };
     });
 
-    // replace textarea with new content
+    // replace textarea with new input
     var textInput = $("<div>")
     .addClass("col-6 px-0 border text-left py-2 px-4")
     .attr("id", "block")
-    .text(newInput);
+    .text(storedInput);
 
     $(".row").find("textarea").replaceWith(textInput);
-
     textInput.trigger("focus");
-    // console.log(events);
+
+    // Rerun the color code function to ensure the replaced event block is colored correctly
     colorCode();
 });
