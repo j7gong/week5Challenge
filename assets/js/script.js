@@ -2,20 +2,26 @@
 $("#currentDay").text(moment().format('dddd, MMMM Do YYYY'));
 
 // Loop all time blocks to indicate if time block is in the past, present, or future
-$(".row").each(function(){
-    var eachTime = $(this).find("#time").text(); 
-    var currentTime = moment();
-    // var currentTime = moment('11:00:00', 'hh:mm:ss');
-    var startTime = moment(eachTime, 'h A');
-    var endTime = moment(startTime).add(1, 'h');
-    if (moment(currentTime).isSameOrAfter(startTime) && moment(currentTime).isBefore(endTime)) {
-        $(this).find("#block").addClass("red");
-    } else if (moment(currentTime).isBefore(startTime)) {
-        $(this).find("#block").addClass("green");
-    } else if (moment(currentTime).isSameOrAfter(endTime)) {
-        $(this).find("#block").addClass("gray");
-    };
-});
+var colorCode = function () {
+    $(".row").each(function(){
+        var eachTime = $(this).find("#time").text(); 
+        var currentTime = moment();
+        // var currentTime = moment('11:00:00', 'hh:mm:ss');
+        var startTime = moment(eachTime, 'h A');
+        var endTime = moment(startTime).add(1, 'h');
+        if (moment(currentTime).isSameOrAfter(startTime) && moment(currentTime).isBefore(endTime)) {
+            $(this).find("#block").addClass("red");
+        } else if (moment(currentTime).isBefore(startTime)) {
+            $(this).find("#block").addClass("green");
+        } else if (moment(currentTime).isSameOrAfter(endTime)) {
+            $(this).find("#block").addClass("gray");
+        };
+    });
+
+    console.log("Run ColorCode!");
+};
+
+colorCode();
 
 // Add edit ability for event block
 $(".row").on("click", "#block", function () {
@@ -43,6 +49,7 @@ if (!events) {
 // Initially load
 $(".row").each(function () {
     var eachTime = $(this).find("#time").text().trim();
+    // var eachText = null;
     var eachText = $(this).find("#block").text().trim();
     events.push({
         time: eachTime,
@@ -81,6 +88,27 @@ $(".row").on("click", "span", function () {
         .trim();
     console.log(inputText);
     
+    // save new input event in localStorage
     updateEvents(inputTime, inputText);
+    
+    // get new input from localStorage
+    var newInput = null;
+
+    events.forEach(function (event) {
+        if (event["time"] == inputTime) {
+            newInput = event["text"]
+        };
+    });
+
+    // replace textarea with new content
+    var textInput = $("<div>")
+    .addClass("col-6 px-0 border text-left py-2 px-4")
+    .attr("id", "block")
+    .text(newInput);
+
+    $(".row").find("textarea").replaceWith(textInput);
+
+    textInput.trigger("focus");
     // console.log(events);
+    colorCode();
 });
